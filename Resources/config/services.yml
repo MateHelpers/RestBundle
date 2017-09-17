@@ -1,0 +1,21 @@
+services:
+#    mate_rest.example:
+#        class: Mate\RestBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]
+
+    app_manager:
+        class: Mate\RestBundle\Service\Manager
+        arguments: ['@doctrine']
+        calls:
+            - [setPropertyAccessor, ['@property_accessor']]
+            - [setSerializer, ['@jms_serializer.serializer']]
+
+    app_entity_manager:
+        class: Mate\RestBundle\Service\EntityManager
+        parent: app_manager
+        calls:
+            - [setValidator, ['@validator']]
+            - [setAnnotationObserver, ['@app_annotation_observer']]
+
+    app_annotation_observer:
+        class: Mate\RestBundle\Annotation\AnnotationObserver

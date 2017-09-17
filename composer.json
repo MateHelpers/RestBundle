@@ -1,0 +1,23 @@
+{
+  "name": "mate/rest-bundle",
+  "description": "Symfony rest bundle helpers for doctrine entities",
+  "keywords": ["symfony3", "rest", "api", "doctrine", "resful"],
+  "website": "https://www.mate.tn",
+  "homepage": "https://github.com/MateHelpers/LemonBundle",
+  "type": "symfony-bundle",
+  "require": {
+    "php": ">=5.5.9",
+    "jms/serializer-bundle": "^2.1",
+    "doctrine/orm": "^2.5"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mohamed Radhi Guennichi",
+      "email": "rg@mate.tn"
+    }
+  ],
+  "autoload": {
+    "psr-4": { "Mate\\RestBundle\\": "" }
+  }
+}

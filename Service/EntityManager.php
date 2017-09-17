@@ -29,8 +29,10 @@ class EntityManager extends Manager
             return $this->serializable($object);
         }
 
+        $writableProps = $this->annotationObserver->getWritableProps($object, $group);
+
         foreach ($data as $property => $value) {
-            if (!in_array($property, $this->annotationObserver->getWritableProps($object, $group))) {
+            if (!in_array($property, $writableProps)) {
                 continue;
             }
 

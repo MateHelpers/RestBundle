@@ -91,6 +91,7 @@ class RestSystem extends Manager
      * @param null $orderBy
      * @param null $limit
      * @return SerializableObject
+     * @throws \Exception
      */
     public function find($repository, $data, $orderBy = null, $limit = null)
     {

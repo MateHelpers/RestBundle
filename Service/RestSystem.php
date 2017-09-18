@@ -5,10 +5,11 @@ namespace Mate\RestBundle\Service;
 
 use Mate\RestBundle\Annotation\AnnotationObserver;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Validator\Exception\ValidatorException;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class EntityManager extends Manager
+class RestSystem extends Manager
 {
     /** @var ValidatorInterface */
     protected $validator;
@@ -23,7 +24,7 @@ class EntityManager extends Manager
      * @return SerializableObject
      * @throws \Exception
      */
-    public function write($object, $data = array(), $group = null)
+    public function write($object, array $data = [], $group = null)
     {
         if (empty($data)) {
             return $this->serializable($object);
@@ -41,7 +42,7 @@ class EntityManager extends Manager
 
         $errors = $this->validator->validate($object);
 
-        if (count($errors) > 0) throw new BadRequestHttpException((string) $errors);
+        if (count($errors) > 0) throw new BadRequestHttpException($this->formatValidationErrorMessage($errors));
 
 
         if (!$this->propertyAccessor->getValue($object, 'id')) {
@@ -123,6 +124,17 @@ class EntityManager extends Manager
     public function setAnnotationObserver(AnnotationObserver $annotationObserver)
     {
         $this->annotationObserver = $annotationObserver;
+    }
+
+    private function formatValidationErrorMessage(ConstraintViolationListInterface $errors)
+    {
+    	/** @var ConstraintViolation $firstError */
+    	$firstError = $errors->get(0);
+
+        $message  = $firstError->getMessage();
+        $property = $firstError->getPropertyPath();
+
+        return sprintf('%s: %s', $property, $message);
     }
 
     /**

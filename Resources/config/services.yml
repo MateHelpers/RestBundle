@@ -1,21 +1,26 @@
 services:
-#    mate_rest.example:
-#        class: Mate\RestBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
-
-    mate_rest_manager:
+    mate_rest.manager:
         class: Mate\RestBundle\Service\Manager
         arguments: ['@doctrine']
         calls:
             - [setPropertyAccessor, ['@property_accessor']]
             - [setSerializer, ['@jms_serializer.serializer']]
 
-    mate_rest_system:
-        class: Mate\RestBundle\Service\EntityManager
-        parent: app_manager
+    mate_rest.system:
+        class: Mate\RestBundle\Service\RestSystem
+        parent: mate_rest.manager
         calls:
             - [setValidator, ['@validator']]
-            - [setAnnotationObserver, ['@app_annotation_observer']]
+            - [setAnnotationObserver, ['@mate_rest.annotation.observer']]
 
-    mate_rest_annotation_observer:
+    mate_rest.annotation.observer:
         class: Mate\RestBundle\Annotation\AnnotationObserver
+
+    mate_rest.request:
+        class: Mate\RestBundle\Service\Request
+        arguments: ["@request_stack"]
+
+    mate_rest.listener.json_exception:
+        class: Mate\RestBundle\Listener\JsonExceptionListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: -10 }

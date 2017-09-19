@@ -35,7 +35,7 @@ class Manager
         $this->serializer = $serializer;
     }
 
-    protected function getManager()
+    public function getManager()
     {
         return $this->managerRegistry->getManager();
     }

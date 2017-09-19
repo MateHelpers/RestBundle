@@ -33,7 +33,7 @@ class Request {
 	/**
 	 * @param string $requestClass
 	 * @param string $group
-	 * @return $this
+	 * @return DotArray
 	 * @throws \Exception
 	 */
 	public function handleFromClass($requestClass, $group = null)
@@ -57,7 +57,7 @@ class Request {
 			throw new BadRequestHttpException($error[0]);
 		}
 
-		return $this;
+		return $this->getRequest();
 	}
 
 	/**

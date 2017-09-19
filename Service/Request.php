@@ -8,6 +8,8 @@ use Rakit\Validation\Validator;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Adbar\Dot as DotArray;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Exception\RuntimeException;
 
 class Request {
@@ -30,10 +32,11 @@ class Request {
 
 	/**
 	 * @param RequestInterface $requestClass
+	 * @param string $group
 	 * @return $this
 	 * @throws \Exception
 	 */
-	public function handleFromClass($requestClass)
+	public function handleFromClass($requestClass, $group = null)
 	{
 		/** @var RequestInterface $requestInstance */
 		$request = new $requestClass();
@@ -44,7 +47,10 @@ class Request {
 
 		$rules = $request->rules();
 
-		$validation = $this->validator->validate($this->getRequest()->all(), $rules);
+		if ($group && !array_key_exists($group, $rules))
+			throw new HttpException(sprintf('Undefined %s group on %s class', $group, $requestClass));
+
+		$validation = $this->validator->validate($this->getRequest()->all(), $group ? $rules[$group] : $rules);
 
 		if ($validation->fails()) {
 			$error = $validation->errors()->firstOfAll();

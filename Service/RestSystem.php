@@ -33,7 +33,7 @@ class RestSystem extends Manager
         $writableProps = $this->annotationObserver->getWritableProps($object, $group);
 
         foreach ($data as $property => $value) {
-            if (!in_array($property, $writableProps)) {
+            if (!in_array($property, $writableProps, true)) {
                 continue;
             }
 
@@ -127,6 +127,11 @@ class RestSystem extends Manager
         $this->annotationObserver = $annotationObserver;
     }
 
+	/**
+	 * @param ConstraintViolationListInterface $errors
+	 *
+	 * @return string
+	 */
     private function formatValidationErrorMessage(ConstraintViolationListInterface $errors)
     {
     	/** @var ConstraintViolation $firstError */

@@ -31,7 +31,7 @@ class Request {
 	}
 
 	/**
-	 * @param RequestInterface $requestClass
+	 * @param string $requestClass
 	 * @param string $group
 	 * @return $this
 	 * @throws \Exception

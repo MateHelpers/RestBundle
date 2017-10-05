@@ -34,8 +34,8 @@
  
   	/**
   	 * @param string $group
- -	 * @return $this
- +	 * @return DotArray
+ 	 * @return $this
+ 	 * @return DotArray
   	 * @throws \Exception
   	 */
   	public function handle($group = null)
@@ -52,8 +52,8 @@
   			throw new BadRequestHttpException($error[0]);
   		}
   
- -		return $this;
- +		return $this->getRequest();
+ 		return $this;
+ 		return $this->getRequest();
   	}
   
   	/**
